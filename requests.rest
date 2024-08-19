@@ -1,0 +1,20 @@
+### get info
+GET http://localhost:3001/api/info 
+
+### get all
+GET http://localhost:3001/api/persons   
+
+### get single resource
+GET http://localhost:3001/api/persons/3
+
+### delete resource
+DELETE http://localhost:3001/api/persons/7954050
+
+### create resource
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name" : "Kobe Bryant",
+    "number": "24-080808081"
+}
