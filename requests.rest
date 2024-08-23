@@ -8,7 +8,7 @@ GET http://localhost:3001/api/persons
 GET http://localhost:3001/api/persons/3
 
 ### delete resource
-DELETE http://localhost:3001/api/persons/7954050
+DELETE http://localhost:3001/api/persons/2
 
 ### create resource
 POST http://localhost:3001/api/persons

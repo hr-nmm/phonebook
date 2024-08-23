@@ -1,27 +1,32 @@
 const express = require("express");
+const cors = require("cors");
 const morgan = require("morgan");
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+app.use(cors());
+app.use(express.static("dist"));
+
+// data
 let persons = [
   {
     id: "1",
     name: "Arto Hellas",
-    number: "040-123456",
+    phoneNumber: "040-123456",
   },
   {
     id: "2",
     name: "Ada Lovelace",
-    number: "39-44-5323523",
+    phoneNumber: "39-44-5323523",
   },
   {
     id: "3",
     name: "Dan Abramov",
-    number: "12-43-234345",
+    phoneNumber: "12-43-234345",
   },
   {
     id: "4",
     name: "Mary Poppendieck",
-    number: "39-23-6423122",
+    phoneNumber: "39-23-6423122",
   },
 ];
 
@@ -62,7 +67,9 @@ app.get("/api/persons/:id", (req, res) => {
 app.delete("/api/persons/:id", (req, res) => {
   const id = req.params.id;
   persons = persons.filter((person) => person.id !== id);
-  res.sendStatus(240).end();
+  res.json({
+    id: id,
+  });
 });
 
 // create resource
@@ -71,7 +78,7 @@ app.post("/api/persons/", (req, res) => {
   const body = req.body;
   if (
     !body.name ||
-    !body.number ||
+    !body.phoneNumber ||
     persons.find((person) => person.name === body.name)
   ) {
     return res.status(400).json({
@@ -81,7 +88,7 @@ app.post("/api/persons/", (req, res) => {
   const person = {
     id: generateID(),
     name: body.name,
-    number: body.number,
+    phoneNumber: body.phoneNumber,
   };
   persons = persons.concat(person);
   res.json(person);
