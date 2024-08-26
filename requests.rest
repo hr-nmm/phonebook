@@ -1,5 +1,5 @@
 ### get info
-GET http://localhost:3001/api/info 
+GET http://localhost:3001/api/info
 
 ### get all
 GET http://localhost:3001/api/persons   
@@ -8,7 +8,7 @@ GET http://localhost:3001/api/persons
 GET http://localhost:3001/api/persons/66ccc1297b8a64575a0d0f5c
 
 ### delete resource
-DELETE http://localhost:3001/api/persons/66cb6a457d0cff823e7877fe
+DELETE http://localhost:3001/api/persons/66cce270db21a44c7ad7d183
 
 ### create resource
 POST http://localhost:3001/api/persons
@@ -17,4 +17,13 @@ Content-Type: application/json
 {
     "name" : "Lana Rhodes",
     "phoneNumber": "179-2922147-12"
+}
+
+### update resource(hitler)
+PUT http://localhost:3001/api/persons/66ccc1297b8a64575a0d0f5c
+Content-Type: application/json
+
+{
+    "name" : "Hitler",
+    "phoneNumber": "000-0000000-00"
 }

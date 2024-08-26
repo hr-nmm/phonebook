@@ -22,40 +22,54 @@ app.use(
 );
 
 // fetch all persons
-app.get("/api/persons", (_, res) => {
-  Contact.find({}).then((result) => {
-    res.json(result);
-  });
+app.get("/api/persons", (_, res, next) => {
+  Contact.find({})
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => next(error));
 });
 
 // fetch info
-app.get("/api/info", (_, res) => {
-  Contact.estimatedDocumentCount().then((result) => {
-    res.send(
-      `<p>
+app.get("/api/info", (_, res, next) => {
+  Contact.estimatedDocumentCount()
+    .then((result) => {
+      res.send(
+        `<p>
         Phonebook has info for ${result} people <br />
         ${new Date()}
       </p>`
-    );
-  });
+      );
+    })
+    .catch((error) => next(error));
 });
 
 // get single resource
-app.get("/api/persons/:id", (req, res) => {
-  Contact.findById(req.params.id).then((contact) => {
-    res.json(contact);
-  });
+app.get("/api/persons/:id", (req, res, next) => {
+  Contact.findById(req.params.id)
+    .then((contact) => {
+      if (contact) {
+        res.json(contact);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 // delete resource
-app.delete("/api/persons/:id", (req, res) => {
-  Contact.findByIdAndDelete(req.params.id).then((result) => {
-    res.json(result);
-  });
+app.delete("/api/persons/:id", (req, res, next) => {
+  Contact.findByIdAndDelete(req.params.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 // create resource
-app.post("/api/persons/", (req, res) => {
+app.post("/api/persons/", (req, res, next) => {
   const body = req.body;
   if (body.name === undefined) {
     return res.status(400).json({
@@ -66,10 +80,45 @@ app.post("/api/persons/", (req, res) => {
     name: body.name,
     phoneNumber: body.phoneNumber,
   });
-  contact.save().then((savedContact) => {
-    res.json(savedContact);
-  });
+  contact
+    .save()
+    .then((savedContact) => {
+      res.json(savedContact);
+    })
+    .catch((error) => next(error));
 });
+
+// update resource
+app.put("/api/persons/:id", (request, response, next) => {
+  const body = request.body;
+  const contact = {
+    name: body.name,
+    phoneNumber: body.phoneNumber,
+  };
+
+  Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
+    .then((updatedContact) => {
+      response.json(updatedContact);
+    })
+    .catch((error) => next(error));
+});
+
+// handler of requests with unknown endpoint
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(unknownEndpoint);
+
+// error handler middleware
+const errorHandler = (error, _, response, next) => {
+  console.error(error.message);
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted mongo id" });
+  }
+  next(error);
+};
+app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
   console.log(`ran successfully`);
