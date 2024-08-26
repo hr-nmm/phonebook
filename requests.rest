@@ -4,17 +4,17 @@ GET http://localhost:3001/api/info
 ### get all
 GET http://localhost:3001/api/persons   
 
-### get single resource
-GET http://localhost:3001/api/persons/3
+### get single resource (hitler)
+GET http://localhost:3001/api/persons/66ccc1297b8a64575a0d0f5c
 
 ### delete resource
-DELETE http://localhost:3001/api/persons/2
+DELETE http://localhost:3001/api/persons/66cb6a457d0cff823e7877fe
 
 ### create resource
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name" : "Kobe Bryant",
-    "phoneNumber": "24-080808081"
+    "name" : "Lana Rhodes",
+    "phoneNumber": "179-2922147-12"
 }

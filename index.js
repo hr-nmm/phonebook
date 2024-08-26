@@ -2,37 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const app = express();
-const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.static("dist"));
 
-// data
-let persons = [
-  {
-    id: "1",
-    name: "Arto Hellas",
-    phoneNumber: "040-123456",
-  },
-  {
-    id: "2",
-    name: "Ada Lovelace",
-    phoneNumber: "39-44-5323523",
-  },
-  {
-    id: "3",
-    name: "Dan Abramov",
-    phoneNumber: "12-43-234345",
-  },
-  {
-    id: "4",
-    name: "Mary Poppendieck",
-    phoneNumber: "39-23-6423122",
-  },
-];
+// MONGO - create schema for model
+const Contact = require("./models/contact");
 
 app.use(express.json());
 morgan.token("hostname", (req, _) => {
-  return `Server running on ${req.hostname}:${PORT}`;
+  return `Server running on ${req.hostname}:${process.env.PORT}`;
 });
 morgan.token("data", (req, _) => {
   return JSON.stringify(req.body);
@@ -44,56 +22,55 @@ app.use(
 );
 
 // fetch all persons
-app.get("/api/persons", (_, res) => res.json(persons));
+app.get("/api/persons", (_, res) => {
+  Contact.find({}).then((result) => {
+    res.json(result);
+  });
+});
 
 // fetch info
 app.get("/api/info", (_, res) => {
-  res.send(
-    `<p>
-      Phonebook has info for ${persons.length} people <br />
-      ${new Date()}
-    </p>`
-  );
+  Contact.estimatedDocumentCount().then((result) => {
+    res.send(
+      `<p>
+        Phonebook has info for ${result} people <br />
+        ${new Date()}
+      </p>`
+    );
+  });
 });
 
 // get single resource
 app.get("/api/persons/:id", (req, res) => {
-  const id = req.params.id;
-  const person = persons.find((person) => person.id === id);
-  person ? res.json(person) : res.sendStatus(404).end("<p>enter valid url</p>");
+  Contact.findById(req.params.id).then((contact) => {
+    res.json(contact);
+  });
 });
 
 // delete resource
 app.delete("/api/persons/:id", (req, res) => {
-  const id = req.params.id;
-  persons = persons.filter((person) => person.id !== id);
-  res.json({
-    id: id,
+  Contact.findByIdAndDelete(req.params.id).then((result) => {
+    res.json(result);
   });
 });
 
 // create resource
-const generateID = () => Math.floor(Math.random() * 10000000 + 1).toString();
 app.post("/api/persons/", (req, res) => {
   const body = req.body;
-  if (
-    !body.name ||
-    !body.phoneNumber ||
-    persons.find((person) => person.name === body.name)
-  ) {
+  if (body.name === undefined) {
     return res.status(400).json({
       error: "content missing/duplicate",
     });
   }
-  const person = {
-    id: generateID(),
+  const contact = new Contact({
     name: body.name,
     phoneNumber: body.phoneNumber,
-  };
-  persons = persons.concat(person);
-  res.json(person);
+  });
+  contact.save().then((savedContact) => {
+    res.json(savedContact);
+  });
 });
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log(`ran successfully`);
 });
