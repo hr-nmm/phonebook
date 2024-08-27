@@ -9,8 +9,8 @@ export default [
     files: ["**/*.{js,jsx}"],
     ignores: ["dist"],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      ecmaVersion: "latest",
+      globals: { ...globals.browser, ...globals.node },
       parserOptions: {
         ecmaVersion: "latest",
         ecmaFeatures: { jsx: true },
@@ -19,6 +19,7 @@ export default [
     },
     settings: { react: { version: "18.3" } },
     plugins: {
+      "@stylistic/js": stylisticJs,
       react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
@@ -33,6 +34,10 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
+      "@stylistic/js/indent": ["error", 2],
+      "@stylistic/js/linebreak-style": ["error", "unix"],
+      "@stylistic/js/quotes": ["error", "single"],
+      "@stylistic/js/semi": ["error", "never"],
     },
   },
 ];

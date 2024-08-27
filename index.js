@@ -90,13 +90,13 @@ app.post("/api/persons/", (req, res, next) => {
 
 // update resource
 app.put("/api/persons/:id", (request, response, next) => {
-  const body = request.body;
-  const contact = {
-    name: body.name,
-    phoneNumber: body.phoneNumber,
-  };
+  const { name, phoneNumber } = request.body;
 
-  Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
+  Contact.findByIdAndUpdate(
+    request.params.id,
+    { name, phoneNumber },
+    { new: true, runValidators: true, context: "query" }
+  )
     .then((updatedContact) => {
       response.json(updatedContact);
     })
@@ -115,6 +115,8 @@ const errorHandler = (error, _, response, next) => {
   console.error(error.message);
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted mongo id" });
+  } else if (error.name === "ValidationError") {
+    return response.json({ error: error.message });
   }
   next(error);
 };

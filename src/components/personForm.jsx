@@ -35,10 +35,14 @@ const PersonForm = ({
                 phoneNumber: newNumber,
               })
               .then((response) => {
-                setPersons(persons.concat(response));
-                console.log(persons);
-                setPersonsToShow(persons.concat(response));
-                setNotificationMessage(`Added ${response.name}'s entry`);
+                if (response.name) {
+                  setPersons(persons.concat(response));
+                  console.log(persons);
+                  setPersonsToShow(persons.concat(response));
+                  setNotificationMessage(`Added ${response.name}'s entry`);
+                } else if (response.error) {
+                  setNotificationMessage(response.error);
+                }
                 setTimeout(() => {
                   setNotificationMessage(null);
                 }, 5000);
