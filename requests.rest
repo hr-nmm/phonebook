@@ -1,5 +1,5 @@
 ### get info
-GET http://localhost:3001/api/info
+GET http://localhost:3001/api/persons/info
 
 ### get all
 GET http://localhost:3001/api/persons   
