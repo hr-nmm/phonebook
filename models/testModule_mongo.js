@@ -1,14 +1,10 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-if (process.argv.length < 2) {
-  console.log(`give password as argument`);
-  process.exit(1);
-}
 
 const url =
   process.env.DATABASE_ACCOUNT_URL +
   process.env.DATABASE_PASSWORD +
-  process.env.DATABASE_CLUSTER_ID;
+  process.env.TEST_DATABASE_CLUSTER_ID;
 mongoose.set("strictQuery", false);
 mongoose.connect(url);
 

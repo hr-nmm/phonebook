@@ -1,12 +1,9 @@
 const personsRouter = require("express").Router();
 const Contact = require("../models/contact");
 // fetch all persons
-personsRouter.get("/", (_, res, next) => {
-  Contact.find({})
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((error) => next(error));
+personsRouter.get("/", async (_, res, next) => {
+  const contacts = await Contact.find({})
+  res.json(contacts)
 });
 
 // fetch info
@@ -62,7 +59,7 @@ personsRouter.post("/", (req, res, next) => {
   contact
     .save()
     .then((savedContact) => {
-      res.json(savedContact);
+      res.status(201).json(savedContact);
     })
     .catch((error) => next(error));
 });
