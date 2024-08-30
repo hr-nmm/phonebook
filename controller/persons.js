@@ -45,7 +45,7 @@ personsRouter.delete("/:id", (req, res, next) => {
 });
 
 // create resource
-personsRouter.post("/", (req, res, next) => {
+personsRouter.post("/", async (req, res, next) => {
   const body = req.body;
   if (body.name === undefined) {
     return res.status(400).json({
@@ -56,12 +56,12 @@ personsRouter.post("/", (req, res, next) => {
     name: body.name,
     phoneNumber: body.phoneNumber,
   });
-  contact
-    .save()
-    .then((savedContact) => {
-      res.status(201).json(savedContact);
-    })
-    .catch((error) => next(error));
+  try {
+    const savedContact = await contact.save()
+    res.status(201).json(savedContact)
+  } catch (exception) {
+    next(exception)
+  }
 });
 
 // update resource
