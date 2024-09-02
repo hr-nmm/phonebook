@@ -33,7 +33,7 @@ if (process.argv.length < 4) {
   });
 
   contact.save().then((result) => {
-    console.log("note saved!", result);
+    console.log("contact saved!", result);
     mongoose.connection.close();
   });
 }
