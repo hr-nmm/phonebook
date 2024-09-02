@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const personsRouter = require("./controller/persons");
+const usersRouter = require('./controller/users')
 const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 
@@ -25,6 +26,7 @@ app.use(express.static("dist"));
 app.use(express.json());
 app.use(logger.morgan(config.MORGAN_SPEC));
 app.use("/api/persons", personsRouter);
+app.use('/api/users', usersRouter)
 app.use(logger.unknownEndpoint);
 app.use(logger.errorHandler);
 
