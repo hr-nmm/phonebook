@@ -6,7 +6,7 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "hr-nmm",
-    "name": "Himanshu Bisht",
-    "passwordHash": "mongopwd"
+    "username": "yugu",
+    "name": "demon Slayer",
+    "passwordHash": "youknowme"
 }

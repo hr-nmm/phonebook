@@ -19,7 +19,7 @@ usersRouter.post('/', async (req, res, next) => {
     }
 })
 usersRouter.get('/', async (_, res) => {
-    const users = await User.find({})
+    const users = await User.find({}).populate('contacts', { name: 1, phoneNumber: 1 })
     res.json(users)
 })
 module.exports = usersRouter

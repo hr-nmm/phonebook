@@ -7,10 +7,10 @@ const userSchema = mongoose.Schema({
     },
     name: String,
     passwordHash: String,
-    contacts: {
+    contacts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Contact'
-    }
+    }]
 })
 
 userSchema.set('toJSON', {

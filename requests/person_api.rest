@@ -15,8 +15,9 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name" : "Lana Rhodes",
-    "phoneNumber": "179-2922147-12"
+    "name" : "Steve Jobs",
+    "phoneNumber": "12-349-8675",
+    "userId": "66d5ff3262883bbebffa8d75"
 }
 
 ### update resource(hitler)

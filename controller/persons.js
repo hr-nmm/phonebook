@@ -1,8 +1,9 @@
 const personsRouter = require("express").Router();
 const Contact = require("../models/contact");
+const User = require("../models/user")
 // fetch all persons
 personsRouter.get("/", async (_, res, next) => {
-  const contacts = await Contact.find({})
+  const contacts = await Contact.find({}).populate("user", { username: 1, name: 1 })
   res.json(contacts)
 });
 
@@ -52,12 +53,17 @@ personsRouter.post("/", async (req, res, next) => {
       error: "content missing/duplicate",
     });
   }
+  const user = await User.findById(body.userId)
   const contact = new Contact({
     name: body.name,
     phoneNumber: body.phoneNumber,
+    user: user.id
   });
   try {
+    const user = await User.findById(body.userId)
     const savedContact = await contact.save()
+    user.contacts = user.contacts.concat(savedContact._id)
+    await user.save()
     res.status(201).json(savedContact)
   } catch (exception) {
     next(exception)
