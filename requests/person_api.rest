@@ -13,11 +13,11 @@ DELETE http://localhost:3001/api/persons/66cce270db21a44c7ad7d183
 ### create resource
 POST http://localhost:3001/api/persons
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhyLW5tbSIsImlkIjoiNjZkNWZmMzI2Mjg4M2JiZWJmZmE4ZDc1IiwiaWF0IjoxNzI1NzMzNDAxLCJleHAiOjE3MjU3MzcwMDF9.exZgJUE9ggD_L3F0UkogIKmz1U0ea1oIAOZR5woj6oo
 
 {
-    "name" : "lipo hellmuth",
-    "phoneNumber": "12-149-8675",
-    "userId": "66db4862ed6db5cabc46796f"
+    "name" : "new phoneno with token hellmuth",
+    "phoneNumber": "88-149-8675"
 }
 
 ### update resource(hitler)

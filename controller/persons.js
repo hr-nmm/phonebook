@@ -1,6 +1,19 @@
 const personsRouter = require("express").Router();
+const { config } = require("dotenv");
 const Contact = require("../models/contact");
 const User = require("../models/user")
+const jwt = require('jsonwebtoken')
+
+// get token from request
+const getTokenFrom = (request) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+
+}
+
 // fetch all persons
 personsRouter.get("/", async (_, res, next) => {
   const contacts = await Contact.find({}).populate("user", { username: 1, name: 1 })
@@ -53,7 +66,8 @@ personsRouter.post("/", async (req, res, next) => {
       error: "content missing/duplicate",
     });
   }
-  const user = await User.findById(body.userId)
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+  const user = await User.findById(decodedToken.id)
   const contact = new Contact({
     name: body.name,
     phoneNumber: body.phoneNumber,
