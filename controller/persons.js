@@ -11,7 +11,6 @@ const getTokenFrom = (request) => {
     return authorization.replace('Bearer ', '')
   }
   return null
-
 }
 
 // fetch all persons
@@ -66,15 +65,15 @@ personsRouter.post("/", async (req, res, next) => {
       error: "content missing/duplicate",
     });
   }
-  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-  const user = await User.findById(decodedToken.id)
-  const contact = new Contact({
-    name: body.name,
-    phoneNumber: body.phoneNumber,
-    user: user.id
-  });
+
   try {
-    const user = await User.findById(body.userId)
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    const user = await User.findById(decodedToken.id)
+    const contact = new Contact({
+      name: body.name,
+      phoneNumber: body.phoneNumber,
+      user: user.id
+    });
     const savedContact = await contact.save()
     user.contacts = user.contacts.concat(savedContact._id)
     await user.save()
